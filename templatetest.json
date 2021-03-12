@@ -1,0 +1,60 @@
+##templates that are not working
+
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "utcValue": {
+      "type": "string",
+      "defaultValue": "[utcNow()]"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Resources/deploymentScripts",
+      "apiVersion": "2020-10-01",
+      "name": "runCLIWithOutputs2",
+      "location": "[resourceGroup().location]",
+      "kind": "AzureCLI",
+      "properties": {
+        "forceUpdateTag": "[parameters('utcValue')]",
+        "AzCliVersion": "2.15.0",
+        "timeout": "PT30M",
+        "arguments": "--resource-group tf-storage-rg --webapp-name backuptest2021 --container-url \\'https://mounttest2020.blob.core.windows.net/newtest?sp=r&st=2021-03-03T07:14:14Z&se=2021-04-09T15:14:14Z&sv=2020-02-10&sr=c&sig=lNqBfbcwSe3Ms1Gl76kIMyrN9mOHOziwoIYqZEf9GPM%3D\\' --frequency 1d --retain-one true --retention 10",
+        "scriptContent": "az webapp config backup update",
+        "cleanupPreference": "OnSuccess",
+        "retentionInterval": "P1D"
+      }
+    }
+  ]
+}
+
+
+
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "utcValue": {
+      "type": "string",
+      "defaultValue": "[utcNow()]"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Resources/deploymentScripts",
+      "apiVersion": "2020-10-01",
+      "name": "runCLIWithOutputs2",
+      "location": "[resourceGroup().location]",
+      "kind": "AzureCLI",
+      "properties": {
+        "forceUpdateTag": "[parameters('utcValue')]",
+        "AzCliVersion": "2.15.0",
+        "timeout": "PT30M",
+        "primaryScriptUri": "https://raw.githubusercontent.com/He11oW-10/armscriptest/main/test.ps1",
+        "cleanupPreference": "OnSuccess",
+        "retentionInterval": "P1D"
+      }
+    }
+  ]
+}
