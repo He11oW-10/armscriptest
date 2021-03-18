@@ -33,15 +33,15 @@
 		},
 		"sp_appid":{
 			"defaultValue":"",   //app id of service principal
-      "type":"String"
+                        "type":"String"
 		},
 		"sp_secret":{
 			"defaultValue":"",   //plain text of service principal secret.
-      "type":"String"			
+                        "type":"String"			
 		},
 		"mytenant_id":{
 			"defaultValue":"72f988bf-86f1-41af-91ab-2d7cd011db47",
-      "type":"String"			
+                        "type":"String"			
 		}
 	},
 	"resources":[{
@@ -63,15 +63,15 @@
                     [string] $frequency_int,
                     [string] $frequency_unit,
                     [string] $retention_day,
-				          	[string] $sp_appid,
-					          [string] $sp_secret,
-					          [string] $mytenant_id
+		    [string] $sp_appid,
+	            [string] $sp_secret,
+	            [string] $mytenant_id
                )
-			         $password=ConvertTo-SecureString -String $sp_secret -AsPlainText -Force
-			         $pscredential =new-object -typename System.Management.Automation.PSCredential -argumentlist $sp_appid, $password
-               Connect-AzAccount -ServicePrincipal -Credential $pscredential -Tenant $mytenant_id
-               Edit-AzWebAppBackupConfiguration -ResourceGroupName $resource_group_name -Name $webapp_name -StorageAccountUrl $container_url -FrequencyInterval $frequency_int -FrequencyUnit $frequency_unit -RetentionPeriodInDays $retention_day -StartTime (Get-Date).AddHours(1)
-            ",
+		     $password=ConvertTo-SecureString -String $sp_secret -AsPlainText -Force
+		     $pscredential =new-object -typename System.Management.Automation.PSCredential -argumentlist $sp_appid, $password
+                     Connect-AzAccount -ServicePrincipal -Credential $pscredential -Tenant $mytenant_id
+                     Edit-AzWebAppBackupConfiguration -ResourceGroupName $resource_group_name -Name $webapp_name -StorageAccountUrl $container_url -FrequencyInterval $frequency_int -FrequencyUnit $frequency_unit -RetentionPeriodInDays $retention_day -StartTime (Get-Date).AddHours(1)
+                ",
 			"cleanupPreference":"OnSuccess",
 			"retentionInterval":"P1D"
 		}}
