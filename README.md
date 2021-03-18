@@ -1,10 +1,11 @@
-Create scehduled backup for azure web app. test for the feedback below.
+Create scehduled backup for azure web app. 
+test for the feedback below.
 https://feedback.azure.com/forums/169385-web-apps/suggestions/42727238-configure-scheduled-backup-in-arm-template
 
-1.create service principal. get appid and plain test of secret. 
-2.run the template
-
-
+1.create service principal. get appid and plain text secret. 
+2.run templatetest.json
+  New-AzResourceGroupDeployment -ResourceGroupName <> -TemplateFile <>
+ 
 
 
 reference:
