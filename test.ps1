@@ -1,1 +1,0 @@
-﻿az webapp config backup update --resource-group tf-storage-rg --webapp-name backuptest2021 --container-url 'https://mounttest2020.blob.core.windows.net/newtest?sp=r&st=2021-03-03T07:14:14Z&se=2021-04-09T15:14:14Z&sv=2020-02-10&sr=c&sig=lNqBfbcwSe3Ms1Gl76kIMyrN9mOHOziwoIYqZEf9GPM%3D' --frequency 1d --retain-one true --retention 10
