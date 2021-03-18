@@ -1,60 +1,79 @@
-##templates that are not working
-
 {
-  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-  "contentVersion": "1.0.0.0",
-  "parameters": {
-    "utcValue": {
-      "type": "string",
-      "defaultValue": "[utcNow()]"
-    }
-  },
-  "resources": [
-    {
-      "type": "Microsoft.Resources/deploymentScripts",
-      "apiVersion": "2020-10-01",
-      "name": "runCLIWithOutputs2",
-      "location": "[resourceGroup().location]",
-      "kind": "AzureCLI",
-      "properties": {
-        "forceUpdateTag": "[parameters('utcValue')]",
-        "AzCliVersion": "2.15.0",
-        "timeout": "PT30M",
-        "arguments": "--resource-group tf-storage-rg --webapp-name backuptest2021 --container-url \\'https://mounttest2020.blob.core.windows.net/newtest?sp=r&st=2021-03-03T07:14:14Z&se=2021-04-09T15:14:14Z&sv=2020-02-10&sr=c&sig=lNqBfbcwSe3Ms1Gl76kIMyrN9mOHOziwoIYqZEf9GPM%3D\\' --frequency 1d --retain-one true --retention 10",
-        "scriptContent": "az webapp config backup update",
-        "cleanupPreference": "OnSuccess",
-        "retentionInterval": "P1D"
-      }
-    }
-  ]
-}
-
-
-
-{
-  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-  "contentVersion": "1.0.0.0",
-  "parameters": {
-    "utcValue": {
-      "type": "string",
-      "defaultValue": "[utcNow()]"
-    }
-  },
-  "resources": [
-    {
-      "type": "Microsoft.Resources/deploymentScripts",
-      "apiVersion": "2020-10-01",
-      "name": "runCLIWithOutputs2",
-      "location": "[resourceGroup().location]",
-      "kind": "AzureCLI",
-      "properties": {
-        "forceUpdateTag": "[parameters('utcValue')]",
-        "AzCliVersion": "2.15.0",
-        "timeout": "PT30M",
-        "primaryScriptUri": "https://raw.githubusercontent.com/He11oW-10/armscriptest/main/test.ps1",
-        "cleanupPreference": "OnSuccess",
-        "retentionInterval": "P1D"
-      }
-    }
-  ]
+	"$schema":"https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+	"contentVersion":"1.0.0.0",
+	"parameters":
+	{
+		"utcValue": {
+			"defaultValue":"[utcNow()]",
+			"type":"String"
+		},
+		"resource_group_name": {
+			"defaultValue":"",
+			"type":"String"
+		},
+		"webapp_name":{
+			"defaultValue":"",
+			"type":"String"
+		},
+		"container_url":{
+			"defaultValue":"",  //SAS token url of blob container
+			"type":"String"
+		},
+		"frequency_int":{
+			"defaultValue":"3",
+			"type":"String"
+		},
+		"frequency_unit":{
+			"defaultValue":"Day",
+			"type":"String"
+		},
+		"retention_day":{
+			"defaultValue":"7",
+			"type":"String"
+		},
+		"sp_appid":{
+			"defaultValue":"",   //app id of service principal
+      "type":"String"
+		},
+		"sp_secret":{
+			"defaultValue":"",   //plain text of service principal secret.
+      "type":"String"			
+		},
+		"mytenant_id":{
+			"defaultValue":"72f988bf-86f1-41af-91ab-2d7cd011db47",
+      "type":"String"			
+		}
+	},
+	"resources":[{
+		"type":"Microsoft.Resources/deploymentScripts",
+		"apiVersion":"2020-10-01",
+		"name":"azPowershellTestV23",
+		"location":"[resourceGroup().location]",
+		"kind":"AzurePowerShell",
+		"properties":{
+			"forceUpdateTag":"[parameters('utcValue')]",
+			"azPowerShellVersion":"5.0",
+			"timeout":"PT30M",
+			"arguments":"[format('-resource_group_name {0} -webapp_name {1} -container_url {2} -frequency_int {3} -frequency_unit {4} -retention_day {5} -sp_appid {6} -sp_secret {7} -mytenant_id {8}', parameters('resource_group_name'), parameters('webapp_name'), concat('\\\"',parameters('container_url'), '\\\"'), parameters('frequency_int'),parameters('frequency_unit'),parameters('retention_day'),parameters('sp_appid'),parameters('sp_secret'), parameters('mytenant_id'))]",
+			"scriptContent":"
+                param(
+                    [string] $resource_group_name,
+                    [string] $webapp_name,
+                    [string] $container_url,
+                    [string] $frequency_int,
+                    [string] $frequency_unit,
+                    [string] $retention_day,
+				          	[string] $sp_appid,
+					          [string] $sp_secret,
+					          [string] $mytenant_id
+               )
+			         $password=ConvertTo-SecureString -String $sp_secret -AsPlainText -Force
+			         $pscredential =new-object -typename System.Management.Automation.PSCredential -argumentlist $sp_appid, $password
+               Connect-AzAccount -ServicePrincipal -Credential $pscredential -Tenant $mytenant_id
+               Edit-AzWebAppBackupConfiguration -ResourceGroupName $resource_group_name -Name $webapp_name -StorageAccountUrl $container_url -FrequencyInterval $frequency_int -FrequencyUnit $frequency_unit -RetentionPeriodInDays $retention_day -StartTime (Get-Date).AddHours(1)
+            ",
+			"cleanupPreference":"OnSuccess",
+			"retentionInterval":"P1D"
+		}}
+	]
 }
