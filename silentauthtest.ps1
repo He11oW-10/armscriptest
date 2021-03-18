@@ -1,5 +1,5 @@
 $username = ""   #service principal app id
-$secret=""   # service principal plain test secret.
+$secret=""   # service principal plain text secret.
 $tenantId=""
 
 $password = ConvertTo-SecureString $secret -AsPlainText -Force
