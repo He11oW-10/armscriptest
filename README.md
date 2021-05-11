@@ -1,4 +1,4 @@
-Create scehduled backup for azure web app. <br />
+Create scheduled backup for azure web app. <br />
 test for the feedback below.<br />
 https://feedback.azure.com/forums/169385-web-apps/suggestions/42727238-configure-scheduled-backup-in-arm-template
 
