@@ -2,7 +2,7 @@ steps:
 - task: AzurePowerShell@5
   displayName: 'Azure PowerShell script: InlineScript'
   inputs:
-    azureSubscription: 'MAIC - Wicresoft - Azure - 09 (7bfee15b-b0d8-489b-89d7-604bbd66603a)'
+    azureSubscription: 'azure -09'
     ScriptType: InlineScript
     Inline: |
      $token=Get-AzAccessToken -ResourceUrl "https://management.azure.com"
