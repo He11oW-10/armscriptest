@@ -1,0 +1,19 @@
+steps:
+- task: AzurePowerShell@5
+  displayName: 'Azure PowerShell script: InlineScript'
+  inputs:
+    azureSubscription: 'MAIC - Wicresoft - Azure - 09 (7bfee15b-b0d8-489b-89d7-604bbd66603a)'
+    ScriptType: InlineScript
+    Inline: |
+     $token=Get-AzAccessToken -ResourceUrl "https://management.azure.com"
+     #$token= & az account get-access-token --resource=https://management.azure.com --query 
+     $subsid="7bfee15b-b0d8-489b-89d7-604bbd66603a"   
+     $rsc_group="yz-nodetest"                       
+     $funcapp_name="tsnode2021test"   
+     $headers2=@{'Authorization'='Bearer '+$token.Token}
+     
+     $function_key=Invoke-RestMethod -Uri https://management.azure.com/subscriptions/$subsid/resourceGroups/$rsc_group/providers/Microsoft.Web/sites/$funcapp_name/host/default/listkeys?api-version=2019-08-01 -Headers $headers2 -Method 'Post'
+     
+     Write-Host $function_key.masterKey
+    azurePowerShellVersion: LatestVersion
+    pwsh: true
