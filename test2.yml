@@ -1,0 +1,13 @@
+steps:
+- task: AzureCLI@2
+  displayName: 'Azure CLI '
+  inputs:
+    azureSubscription: 'MAIC - Wicresoft - Azure - 09 (7bfee15b-b0d8-489b-89d7-604bbd66603a)'
+    scriptType: pscore
+    scriptLocation: inlineScript
+    inlineScript: |
+     $rsc_group="yz-nodetest"                       
+     $funcapp_name="tsnode2021test"   
+     
+     $keys=az functionapp keys list --name $funcapp_name --resource-group $rsc_group | ConvertFrom-Json
+     $keys.masterKey
